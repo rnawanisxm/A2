@@ -174,7 +174,7 @@ class Numbers {
       
       
       var error_rate = abs(m-this.value)/(max(mins)-m);
-      
+      error_rate = error_rate.toFixed(2)
       str+=" "+error_rate
       
       
@@ -280,6 +280,7 @@ function printOut(){
   const writer = createWriter('results.txt');
   
   let rate = right/(right+wrong);
+  rate = rate.toFixed(2)
   var str = 'Participate\'s name: '+ name+'\tfinal correct rate: '+rate+'\n';
   str += result;
   writer.print(str);
@@ -288,6 +289,3 @@ function printOut(){
   clear()
   
 }
-
-
-
