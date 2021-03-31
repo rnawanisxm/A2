@@ -149,7 +149,7 @@ function userInput(){
   removeElements();
   name = input.value();
   h1 = createElement('h1', "Hello " + name + "!")
-  h2 = createElement('h3', "In this experiment, you have to try your best to find and click on the smallest number or bubble. Everytime you finish a trial, you need to click on the blank screen again  to start the next one. The result of this experiment will be collected as a table shown in the end. Press below to start the trial.")
+  h2 = createElement('h3', "In this experiment, you have to try your best to find and click on the smallest number or bubble.<br/>Please start after reading the instruction carefully:<br/><br/>1. Click on the blank screen to start.<br/>2. Click on the smallest number or bubble in the screen.<br/> 3.Everytime you finish a trial, you need to click on the blank screen again  to start the next one. <br/><br/>The result of this experiment will be collected as a table shown in the end. Press below to start the trial.")
   count = 0;
   correct = 3;
 }
