@@ -171,6 +171,14 @@ class Numbers {
     if (d< this.r){
       
       var str = mins + " " + m + " " + this.value + " " + int(millis() -timeNow)
+      
+      
+      var error_rate = abs(m-this.value)/(max(mins)-m);
+      
+      str+=" "+error_rate
+      
+      
+      
       if(m == this.value){
         right+=1;
         str += " 1\n"
