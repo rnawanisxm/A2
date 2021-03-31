@@ -6,7 +6,7 @@ var h4;
 var button;
 var slide = 0;
 var result = "";
-let n = [3,5, 9, 25];
+let n = [3,5,9,25];
 //set this to 0 when we want to start the experiment
 let count = 100;
 let nums = [];
@@ -20,6 +20,9 @@ let intro1 = "Number Experiment: Click outside of canvas to begin."
 
 let intro2 = "Circle Experiment: Click outside of canvas to begin."
 let timeNow;
+
+let right = 0;
+let wrong = 0;
 
 
 
@@ -91,6 +94,7 @@ function mousePressed()
       
       if (type == 2){
         r = int(random(5, 40));
+        temp = r;
       }
       
       let t = new Numbers(x, y, r, temp)
@@ -165,7 +169,16 @@ class Numbers {
     correct = 0
     
     if (d< this.r){
-      var str = mins + " " + m + " " + this.value + " " + int(millis() -timeNow) + "\n "
+      
+      var str = mins + " " + m + " " + this.value + " " + int(millis() -timeNow)
+      if(m == this.value){
+        right+=1;
+        str += " 1\n"
+      }else{
+        wrong+=1;
+        str += " 0\n"
+      }
+      
       
       result +=  str
       nums = []
@@ -253,8 +266,13 @@ function changeType(){
 function printOut(){
   h1.html("Thank you!")
   h2.html("For the next step please send the downloaded text file to use on Slack DM. After you have sent our data please copy the link below to fill out a short questionnaire about the experiment.")
+  let survey = createA('https://docs.google.com/forms/d/e/1FAIpQLSe7YrB_6BWGLx1QamutJJXgjNmkAaXIsRqYdDvTd4NOjM40CQ/viewform','Please  complete the survey.');
+  survey.position(0,300);
+  
   const writer = createWriter('results.txt');
-  var str = name;
+  
+  let rate = right/(right+wrong);
+  var str = 'Participate\'s name: '+ name+'\tfinal correct rate: '+rate+'\n';
   str += result;
   writer.print(str);
   writer.close();
