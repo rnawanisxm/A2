@@ -1,113 +1,155 @@
+//Global Variables
+var canvas; 
+var h1;
+var h2;
+var h4;
+var button;
+var slide = 0;
+var result = "";
+let n = [3,5, 9, 25];
+//set this to 0 when we want to start the experiment
+let count = 100;
 let nums = [];
-let list = [];
 let iter = 3;
-//let n = [3, 5, 9, 25, 3, 5, 9, 25];
-let n = [3];
-let correct = 1;
-let count = 0;
 let mins = [];
-let m = 0;
-let txt = "";
 let type = 1;
-let intro = "In this experiment, \nyou have to try your best to \nfind and click on the smallest number or bubble. \nEverytime you finish a trail, \nyou need to click on the blank screen again \nto start the next one.\nThe result of this experiment will be collected \nas a table shown in the end";
-let outro = "Please copy the results from the console \nto the google document";
-let start = 0;
+let correct = 0;
+let start = 99;
+let output = ""
+let intro1 = "Number Experiment: Click outside of canvas to begin."
+
+let intro2 = "Circle Experiment: Click outside of canvas to begin."
+let timeNow;
 
 
+
+//setup elements
 function setup() {
-  createCanvas(400, 400);
-
+  canvas = createCanvas(400, 400);
+  canvas.position(0, 200);
+  h1 = createElement('h1', "UVIC HCI Experiment")
+  h2 = createElement('h2', "By: Rahul Nawani and Martin Zhao")
+  h3 = createElement("h3", "To begin enter your name and press below")
+  input = createInput();
+  input.position(60,167);
+  button = createButton("Begin")
+  button.mousePressed(userInput);
+  
+  var randomS = int(random(0,2))
+  console.log(randomS)
+  if (randomS == 0){
+    type = 1;
+  }
+  else{
+    type = 2;
+    }
+ 
 }
 
-function mousePressed() {
+function mousePressed()
+{
   var s = n[count];
-  start = 1;
 
-  if (correct == 1) {
-    timeNow = millis()
-
+  if (start == 1){
+    start = 0;
+    correct = 1;
+    h1.html("If you mess up in any way by clicking too fast inside the box feel free to retry the experiment.")
+    h2.html("After each number/circle is chosen click outside of the canvas to go to the next trial.")
   }
-
-  if (iter > 0 & correct == 1) {
+  
+  if (correct == 1) 
+  {
+    timeNow = millis()
     var j = 1;
     var ystart = 75;
     var initials = 0;
 
-    if (s == 3 || s == 5) {
+    if (s == 3 || s == 5) 
+    {
       initials = 75
-    } else {
-
+    } 
+    else {
       initials = 40
-
     }
 
-    for (let i = 0; i < s; i++) {
+    for (let i = 0; i < s; i++) 
+    {
+      
       var temp = int(random(0, 100));
 
-      if (j == 8) {
+      if (j == 8) 
+      {
         j = 1;
-        ystart += ystart;
+        ystart += 75;
 
       }
       var x = initials * j;
 
       var y = ystart;
-      var r = int(random(5, 40));
+      
+      var r = 35;
+      
+      if (type == 2){
+        r = int(random(5, 40));
+      }
+      
       let t = new Numbers(x, y, r, temp)
 
-      if (type == 1) {
+      if (type == 1) 
+      {
         mins.push(temp);
-      } else {
+      } 
+      else 
+      {
         mins.push(r);
       }
 
       nums.push(t)
       m = min(mins);
-      correct = 0;
+      correct = 1;
       j += 1
     }
-    iter -= 1
+    
   }
-
-
+  
+  
   for (let i = 0; i < nums.length; i++) {
     nums[i].clicked(mouseX, mouseY);
   }
-
-
+  
+  
+  
 }
-
-
-
 
 
 function draw() {
-
   background(220);
-
-  //This is the case
-  if (start == 0) {
-    textAlign(CENTER, CENTER);
-    textSize(16);
-
-    text(intro, width / 2, height / 2);
-  }
-
-
+ 
+  
   for (let i = 0; i < nums.length; i++) {
     nums[i].show();
   }
-
-  if (correct == 3) {
+  
+  if (correct == 3){
     textAlign(CENTER, CENTER);
     textSize(16);
-    text(outro, width / 2, height / 2);
-
+    text(intro1, width / 2, height / 2);
+    start = 1;
   }
-
-
-
+  
+ 
 }
+
+//takes the name of the user and stores it as the first line of result.
+function userInput(){
+  removeElements();
+  name = input.value();
+  h1 = createElement('h1', "Hello " + name + "!")
+  h2 = createElement('h3', "In this experiment, you have to try your best to find and click on the smallest number or bubble. Everytime you finish a trial, you need to click on the blank screen again  to start the next one. The result of this experiment will be collected as a table shown in the end. Press below to start the trial.")
+  count = 0;
+  correct = 3;
+}
+
 
 
 class Numbers {
@@ -120,65 +162,49 @@ class Numbers {
 
   clicked(px, py) {
     let d = dist(px, py, this.x, this.y);
-    if (type == 1) {
-      if (d < this.r && this.value == m) {
-        var results = mins
-        nums = []
-        mins = []
-        correct = 1
-        results += " " + this.value + " " + int(millis() - timeNow)
-        print(results)
-        if (iter == 0) {
-          iter = 3;
-          count += 1;
-
-          if (count == 4) {
-            type = 2;
-          }
-
-        }
+    correct = 0
+    
+    if (d< this.r){
+      var str = mins + " " + m + " " + this.value + " " + int(millis() -timeNow) + "\n "
+      
+      result +=  str
+      nums = []
+      mins = []
+    
+      if (iter == 0){
+        count +=1;
+        iter = 3;
       }
-    } else {
-      if (d < this.r && this.r == m) {
-        var results1 = mins
-        nums = []
-        mins = []
-        correct = 1
-        results1 += " " + this.value + " " + int(millis() - timeNow)
-        print(results1)
-        if (iter == 0) {
-          iter = 3;
-          count += 1;
-
-          if (count == 8) {
-            correct = 3;
-          }
-        }
+      if (count == 4){
+        changeType();
       }
-
+      iter -= 1
+      correct = 1
     }
-
-
-
-
-
-
+    
 
   }
 
-  show() {
+  show() 
+  {
     var siz = 35
-
-    if (count == 3) {
+    if (count == 3) 
+    {
       siz = 20;
-    } else if (count == 2) {
+    } 
+    
+    else if (count == 2) 
+    {
       siz = 30
     }
-    if (type == 1) {
+    if (type == 1) 
+    {
       textSize(siz);
       var txt = this.value
       text(txt, this.x, this.y);
-    } else if (type == 2) {
+    } 
+    else if (type == 2) 
+    {
       stroke(255);
       strokeWeight(4);
       textSize(siz);
@@ -188,7 +214,54 @@ class Numbers {
     }
 
   }
-
-
-
 }
+
+
+function changeType(){
+  
+  if (type == 1){
+    if (start == 0){
+      type = 2;
+      count = 0;
+      start +=2;
+    }
+    else{
+      printOut()
+      
+    }
+    
+    
+    
+  }
+  else{
+    if (start == 0){
+      type = 1;
+      count = 0;
+      start +=2;
+    }
+    else{
+      printOut()
+      
+    }
+    
+  }
+  
+}
+
+
+
+function printOut(){
+  h1.html("Thank you!")
+  h2.html("For the next step please send the downloaded text file to use on Slack DM. After you have sent our data please copy the link below to fill out a short questionnaire about the experiment.")
+  const writer = createWriter('results.txt');
+  var str = name;
+  str += result;
+  writer.print(str);
+  writer.close();
+  writer.clear();
+  clear()
+  
+}
+
+
+
