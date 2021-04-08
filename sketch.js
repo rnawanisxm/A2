@@ -29,7 +29,7 @@ let wrong = 0;
 //setup elements
 function setup() {
   canvas = createCanvas(400, 400);
-  canvas.position(0, 200);
+  canvas.position(0, 800);
   h1 = createElement('h1', "UVIC HCI Experiment")
   h2 = createElement('h2', "By: Rahul Nawani and Martin Zhao")
   h3 = createElement("h3", "To begin enter your name and press below")
